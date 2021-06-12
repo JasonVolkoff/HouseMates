@@ -17,7 +17,7 @@
 
 <body>
     <div>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg">
             <div class="col-10 offset-1 d-flex justify-content-between">
                 <a class="navbar-brand"> HouseMates</a>
                 <div class="mt-1">
@@ -36,7 +36,7 @@
         {% endif %}
         <div class="row">
             <div class="roundBorder shadow col col-6 offset-3 p-3">
-                <h1 class="text-center mb-4">Register</h1>
+                <h1 class="text-center mb-4">Create your account</h1>
                 <form action="/register" method="POST">
                     {% csrf_token %}
                     <div class="form-group row">
@@ -69,7 +69,10 @@
                             <input type="password" class="form-control" id="confirmpassword" name="confirmPassword">
                         </div>
                     </div>
-                    <button class="fancyButtonB">Register</button>
+                    <div class="float-right">
+                        <button class="fancyButtonB">Register</button>
+                    </div>
+
                 </form>
             </div>
         </div>
@@ -77,20 +80,19 @@
     <footer class="footer">footer content</footer>
     <!-- The Modal -->
     <div id="myModal" class="modal">
-
         <!-- Modal content -->
         <div class="roundBorder modal-content">
             <span class="close">&times;</span>
-            <h1 class="mb-5">Login</h1>
+            <h2 class="text-center">Housemates</h2>
+            <h1 class="mb-4 mt-4 text-center">Login</h1>
             <form action="/login" method="POST">
                 {% csrf_token %}
+                <input type="text" placeholder="email" class="mb-4 form-control" id="email" name="email">
+                <input type="password" placeholder="password" class="mb-4 form-control" id="password" name="password">
+                <div class="float-right">
+                    <button class="fancyButtonW">Login</button>
+                </div>
 
-                <input type="text" placeholder="email" class="form-control" id="email" name="email">
-
-
-                <input type="password" placeholder="password" class="form-control" id="password" name="password">
-
-                <button class="fancyButtonW">Login</button>
             </form>
         </div>
     </div>
