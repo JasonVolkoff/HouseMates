@@ -74,6 +74,7 @@ class House(models.Model):
 
 
 class Item(models.Model):
+    # Can be owned by multiple people. Can reference ownership history via related notifications
     name = models.CharField(max_length=255)
     price = models.DecimalField(
         max_digits=10, decimal_places=2, default=0)
@@ -84,12 +85,9 @@ class Item(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
-# Add Item fractional ownership model to indicate how much of the item you own
-
-
 class Invite(models.Model):
     house = models.ForeignKey(
-        House, related_name="invites", on_delete=CASCADE,)
+        House, related_name="invites", on_delete=CASCADE)
     user = models.ForeignKey(
         User, related_name="invites", on_delete=CASCADE)
 
@@ -101,7 +99,8 @@ class Notification(models.Model):
         ('CREATED', 'created'),
         ('HELPED', 'helped purchase'),
         ('REGISTERED', 'registered an account'),
-        ('ACCEPTED', 'accepted invite to'))
+        ('ACCEPTED', 'accepted invite to'),
+        ('DECLINED', 'declined invite to'))
     sender = models.ForeignKey(
         User, on_delete=CASCADE, blank=True, null=True, related_name='sent_notifications')
     receiver = models.ForeignKey(User, on_delete=CASCADE,
@@ -109,22 +108,20 @@ class Notification(models.Model):
     house = models.ForeignKey(
         House, on_delete=CASCADE, blank=True, null=True, related_name='notifications')
     item = models.ForeignKey(Item, blank=True, null=True,
-                             related_name='item_notification', on_delete=CASCADE)
+                             related_name='item_notifications', on_delete=CASCADE)
+    helped_purchase = models.DecimalField(
+        blank=True, null=True, max_digits=10, decimal_places=2)
     action = models.CharField(
         choices=ACTIONS, default='CREATED', max_length=32)
     invite = models.ForeignKey(
-        Invite, blank=True, null=True, related_name='notification', on_delete=CASCADE)
+        Invite, blank=True, null=True, related_name='notifications', on_delete=CASCADE)
     date = models.DateTimeField(auto_now_add=True)
 
     def profileFormat(self):
         action = f"{self.get_action_display()}"
-        receiver = self.receiver
         house = self.house
-        item = self.item
         sender = self.sender
-        if self.action == "PURCHASED":
-            notification = f'You {action} {item.name}'
-        elif self.action == "INVITED":
+        if self.action == "INVITED":
             notification = f'{sender.first_name} {sender.last_name} {action} you to {house.nickname}'
         elif self.action == "CREATED":
             notification = f'You {action} {house.nickname}'
@@ -132,38 +129,46 @@ class Notification(models.Model):
             notification = f'You {action}'
         elif self.action == "ACCEPTED":
             notification = f'You {action} {house.nickname}'
+        elif self.action == "DECLINED":
+            notification = f'You {action} {house.nickname}'
         return notification
 
     def houseFormat(self):
-        action = f"{self.get_action_display()}"
-        sender = self.sender
+        notification = f"{self.sender.first_name} {self.get_action_display()}"
         receiver = self.receiver
         house = self.house
         item = self.item
         if self.action == "PURCHASED":
-            notification = f'{sender.first_name} {action} {item.name}'
+            notification += f'{item.name}'
         elif self.action == "INVITED":
-            notification = f'{sender.first_name} {action} {receiver.first_name} {receiver.last_name} to {house.nickname}'
+            notification += f'{receiver.first_name} {receiver.last_name} to {house.nickname}'
         elif self.action == "CREATED":
-            notification = f'{receiver.first_name} {action} {house.nickname}'
+            notification += f'{house.nickname}'
         elif self.action == "HELPED":
-            notification = f'You {action} {item.name}'
+            notification += f'{item.name}'
         elif self.action == "ACCEPTED":
-            notification = f'{sender.first_name} {action} {house.nickname}'
+            notification += f'{house.nickname}'
+        elif self.action == "DECLINED":
+            notification += f'{house.nickname}'
         return notification
 
-    def responseFormat(self):
-        if self.action == "INVITED":
-            if self.invite.exists():
-                return "Pending"
-            else:
-                return "Accepted"
-        if self.action == "CREATED":
-            return "Yay!"
+    def houseOutputFormat(self):
         if self.action == "PURCHASED":
-            return self.item.price
-        if self.action == "HELPED":
-            return " "
+            output = f'{self.item.price}'
+        elif self.action == "INVITED":
+            if House.objects.filter(member=self.receiver).exists():
+                output = "Accepted"
+            elif Invite.objects.filter(user=self.receiver).exists():
+                output = "Declined"
+            else:
+                output = "Pending"
+        elif self.action == "CREATED" or self.action == "ACCEPTED":
+            output = "Welcome!"
+        elif self.action == "HELPED":
+            output = f'${self.helped_purchase} of ${self.item.price}'
+        elif self.action == "DECLINED":
+            output = ""
+        return output
 
 
 class Balance(models.Model):
