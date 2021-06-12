@@ -167,7 +167,7 @@ class Notification(models.Model):
         elif self.action == "HELPED":
             output = f'${self.helped_purchase} of ${self.item.price}'
         elif self.action == "DECLINED":
-            output = ""
+            output = " "
         return output
 
 

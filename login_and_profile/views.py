@@ -164,13 +164,42 @@ def add_item(request):
     return redirect('/profile/main_house')
 
 
-def help_purchase(request, item_id):
+def help_purchase(request, item_id, amount):
     if request.method == "GET":
         return redirect('/profile/main_house')
+    # Get session user, relevant item, original buyer of item, and current house.
     this_user = User.objects.get(id=request.session['user_id'])
     this_item = Item.objects.get(id=item_id)
+    original_buyer = this_item.owned_by.first()
     this_house = House.objects.get(id=request.session['main_house_id'])
+    # Add session user to be an additonal owner of the item.
     this_user.users_items.add(this_item)
+    # Get Balance instance shared between original owner and session user.
+    shared_balance = this_user.between_balance.all().filter(
+        two_users=original_buyer)[0]
+    # Add amount due FROM session user TO original owner.
+    # When the shared_balance.first_user is the same as session user,
+    # the balance is subtracted, otherwise it is added.
+    if shared_balance.first_user == this_user:
+        shared_balance.balance_owed -= amount
+    else:
+        shared_balance.balance_owed += amount
+    # Create notification of the event.
     Notification.objects.create(
-        sender=this_user, action="HELPED", item=this_item, house=this_house)
+        sender=this_user, action="HELPED", item=this_item, house=this_house, helped_purchase=amount)
+    return redirect('/profile/main_house')
+
+
+def delete_item(request, notification_id):
+    if request.method == "GET":
+        return redirect('profile/main_house')
+    this_notification = Notification.objects.get(id=notification_id)
+    this_item = this_notification.item
+    if this_item.owned_by.all().count < 2:
+        this_item.delete()
+    else:
+        messages.error(
+            request, 'Cannot delete item because there is more than one owner,would you like to remove ownership of this item?')
+        return redirect('/profile/main_house/')
+    this_notification.delete()
     return redirect('/profile/main_house')
