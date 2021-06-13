@@ -1,69 +1,57 @@
-/* BASE CSS */
-body {
-    font-family: "Helvetica Neue";
-}
-
-html {
+#banner {
     position: relative;
-    min-height: 100%;
+    background-color: rgb(226, 255, 255);
 }
 
-body {
-    margin-bottom: 60px;
-    /* Margin bottom by footer height */
-}
-
-.fancyButton {
+.fancyButtonW1 {
     box-shadow: inset 0px 1px 0px 0px #ffffff;
     background: linear-gradient(to bottom, #ffffff 5%, #f6f6f6 100%);
-    width: 75px !important;
+    width: 100px !important;
     height: 30px;
     background-color: #ffffff;
     border-radius: 20px;
     border: 1px solid #dcdcdc;
     display: inline-block;
     cursor: pointer;
-    color: #39cff5;
-    border-color: #39cff5;
-    font-size: 10px;
-    font-weight: bold;
+    color: rgb(29, 161, 242);
+    border-color: rgb(29, 161, 242);
+    font-size: 14px;
     padding: 0;
     text-decoration: none;
     text-align: center;
-    text-shadow: 0px 1px 0px #ffffff;
+    text-shadow: 0px 1px 2px #f6f6f6
 }
 
-.fancyButton:hover {
-    background: linear-gradient(to bottom, #f6f6f6 5%, #ffffff 100%);
-    background-color: #f6f6f6;
+.fancyButtonB1 {
+    box-shadow: inset 0px 1px 0px 0px #ffffff;
+    background: linear-gradient(to bottom, rgb(29, 161, 242) 5%, #35d3fa 100%);
+    width: 100px !important;
+    height: 30px;
+    background-color: rgb(29, 161, 242);
+    border-radius: 20px;
+    border: 1px solid #dcdcdc;
+    display: inline-block;
+    cursor: pointer;
+    color: #ffffff;
+    border-color: rgb(29, 161, 242);
+    font-size: 14px;
+    padding: 0;
+    text-decoration: none;
+    text-align: center;
 }
 
-.fancyButton:active {
+.fancyButtonW1:hover {
+    background: linear-gradient(to bottom, #f6f6f6 5%, rgb(220, 247, 255) 100%);
+    background-color: rgb(220, 247, 255);
     position: relative;
     top: 1px;
 }
 
-.footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 60px;
-    /* Set the fixed height of the footer here */
-    line-height: 60px;
-    /* Vertically center the text there */
-    background-color: #f5f5f5;
-}
-
-#banner {
+.fancyButtonB1:hover {
+    background: linear-gradient(to bottom, rgb(102, 219, 255) 1%, rgb(27, 161, 242) 100%);
+    background-color: rgb(27, 161, 242);
     position: relative;
-    background-color: rgb(226, 255, 255);
-}
-
-.border1 {
-    border-style: solid;
-    border-width: 1px;
-    border-color: #dee2e6;
-    border-radius: 20px;
+    top: 1px;
 }
 
 #profileCircle {
@@ -93,11 +81,6 @@ body {
     -webkit-box-shadow: 0 0 8px #39cff5;
     -moz-box-shadow: 0 0 8px #39cff5;
     background-color: white;
-}
-
-.smallText {
-    font-size: 12px;
-    padding-right: 0px !important;
 }
 
 #roommateCircle {
@@ -135,28 +118,6 @@ body {
     margin: auto;
 }
 
-
-
-.fancyButton2 {
-    box-shadow: inset 0px 1px 0px 0px #ffffff;
-    background: linear-gradient(to bottom, #ffffff 5%, #f6f6f6 100%);
-    width: 150px !important;
-    height: 30px;
-    background-color: #ffffff;
-    border-radius: 20px;
-    border: 1px solid #dcdcdc;
-    display: inline-block;
-    cursor: pointer;
-    color: #39cff5;
-    border-color: #39cff5;
-    font-size: 14px;
-    font-weight: bold;
-    padding: 0;
-    text-decoration: none;
-    text-align: center;
-    text-shadow: 0px 1px 0px #ffffff;
-}
-
 .houseSelection {
     list-style-type: none;
     margin: 0;
@@ -166,8 +127,24 @@ body {
 #price {
     border-style: hidden;
     outline: none;
-    width: 50px;
+    width: 65px;
     background-color: rgb(253, 253, 253);
+}
+
+/* BORDERS AND GRIDS */
+.roundBorder {
+    border-style: solid;
+    border-width: 0px;
+    border-radius: 20px;
+}
+
+.shadow {
+    -webkit-box-shadow: 3px 3px 5px 6px #ccc;
+    /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+    -moz-box-shadow: 3px 3px 5px 6px #ccc;
+    /* Firefox 3.5 - 3.6 */
+    box-shadow: 3px 3px 5px 6px #ccc;
+    /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
 }
 
 #noBox {
@@ -175,4 +152,53 @@ body {
     outline: none;
     width: 100%;
     background-color: rgb(253, 253, 253);
+}
+
+/* LOGIN POPUP */
+.modal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    padding-top: 160px;
+    /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 600px;
+    height: 400px !important;
+}
+
+/* The Close Button */
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
 }

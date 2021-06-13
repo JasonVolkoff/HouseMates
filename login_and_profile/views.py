@@ -1,7 +1,8 @@
 import re
-from .models import Invite, User, Item, Invite, House, Balance, Notification
+from .models import User, Item, Invite, House, Balance, Notification
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from decimal import Decimal
 
 # Create your views here.
 
@@ -74,8 +75,6 @@ def create_house(request):
     new_house = House.objects.create(
         nickname=request.POST['nickname'])
     new_house.members.add(this_user)
-    # add self to house and create initial balance with self
-    Balance.objects.create(first_user=this_user)
     Notification.objects.create(
         receiver=this_user, sender=this_user, house=new_house, action="CREATED")
     request.session['main_house_id'] = new_house.id
@@ -102,19 +101,28 @@ def invite_response(request, notification_id, bool):
     this_house = my_invite.house
     this_user = User.objects.get(id=request.session['user_id'])
     if bool == 0:  # if declined
-        Notification.objects.create(
-            receiver=this_user, sender=this_user, house=this_house, action="DECLINED")
+        # update notification to DECLINED and add target as sender
+        this_notification.action = "DECLINED"
+        this_notification.sender = this_user
     elif bool == 1:  # if accepted
         Notification.objects.create(
             receiver=this_user, sender=this_user, house=this_house, action="ACCEPTED")
-        # create a new balance for all users now in the house
         all_users = this_house.members.all()
+        # create a new balance for all users now in the house
         for user in all_users:
             new_bal = Balance.objects.create(first_user=user)
             new_bal.two_users.add(user)
             new_bal.two_users.add(this_user)
-        my_invite.house.members.add(this_user)
+            new_bal.house.add(this_house)
+        # add new member to house and set house session
+        this_house.members.add(this_user)
         request.session['main_house_id'] = my_invite.house.id
+    # save notification and delete the now useless Invite instance
+    this_notification.invite = None
+    this_notification.save()
+    my_invite.delete()
+    # *Attempt* redirect to main house;
+    # Will auto redirect back to profile if response to invite was DECLINED
     return redirect('/profile/main_house')
 
 
@@ -145,7 +153,10 @@ def main_house(request):
     if 'main_house_id' not in request.session:
         return redirect('/profile')
     this_house = House.objects.get(id=request.session['main_house_id'])
+    this_user = User.objects.get(id=request.session['user_id'])
+    balances = this_house.house_balances.all().filter(two_users=this_user)
     context = {
+        'balances': balances,
         'house': this_house,
     }
     return render(request, 'house.html', context)
@@ -164,19 +175,20 @@ def add_item(request):
     return redirect('/profile/main_house')
 
 
-def help_purchase(request, item_id, amount):
+def help_purchase(request, item_id):
     if request.method == "GET":
         return redirect('/profile/main_house')
     # Get session user, relevant item, original buyer of item, and current house.
     this_user = User.objects.get(id=request.session['user_id'])
     this_item = Item.objects.get(id=item_id)
-    original_buyer = this_item.owned_by.first()
+    original_buyer = this_item.owned_by.all()[0]
+    amount = Decimal(request.POST['price'])
     this_house = House.objects.get(id=request.session['main_house_id'])
     # Add session user to be an additonal owner of the item.
     this_user.users_items.add(this_item)
     # Get Balance instance shared between original owner and session user.
-    shared_balance = this_user.between_balance.all().filter(
-        two_users=original_buyer)[0]
+    shared_balance = Balance.objects.filter(
+        two_users__in=[this_user]).filter(two_users__in=[original_buyer])[0]
     # Add amount due FROM session user TO original owner.
     # When the shared_balance.first_user is the same as session user,
     # the balance is subtracted, otherwise it is added.
@@ -184,6 +196,7 @@ def help_purchase(request, item_id, amount):
         shared_balance.balance_owed -= amount
     else:
         shared_balance.balance_owed += amount
+    shared_balance.save()
     # Create notification of the event.
     Notification.objects.create(
         sender=this_user, action="HELPED", item=this_item, house=this_house, helped_purchase=amount)
@@ -195,11 +208,12 @@ def delete_item(request, notification_id):
         return redirect('profile/main_house')
     this_notification = Notification.objects.get(id=notification_id)
     this_item = this_notification.item
-    if this_item.owned_by.all().count < 2:
+    count = this_item.owned_by.all().count()
+    if count < 2:
         this_item.delete()
     else:
         messages.error(
-            request, 'Cannot delete item because there is more than one owner,would you like to remove ownership of this item?')
+            request, 'Cannot delete item because there is more than one owner')
         return redirect('/profile/main_house/')
     this_notification.delete()
     return redirect('/profile/main_house')

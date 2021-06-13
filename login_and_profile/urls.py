@@ -18,5 +18,5 @@ urlpatterns = [
     path('profile/main_house/delete_item/<int:notification_id>', views.delete_item),
     path('profile/main_house/add_housemate', views.add_housemate),
     path('profile/main_house/add_item', views.add_item),
-    path('profile/main_house/help_purchase/<int:item_id>/', views.help_purchase),
+    path('profile/main_house/help_purchase/<int:item_id>', views.help_purchase),
 ]

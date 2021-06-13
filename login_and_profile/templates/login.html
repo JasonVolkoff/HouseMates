@@ -10,9 +10,9 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
         integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
-    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script type="text/javascript" src="{% static 'javascript/login.js' %}"></script>
+    <script type="text/javascript" src="{% static 'javascript/script.js' %}"></script>
 </head>
 
 <body>
@@ -21,19 +21,12 @@
             <div class="col-10 offset-1 d-flex justify-content-between">
                 <a class="navbar-brand"> HouseMates</a>
                 <div class="mt-1">
-                    <button id="myBtn" class="fancyButtonW" href="#">Log in</button>
+                    <button class="myBtn fancyButtonW1" href="#">Log in</button>
                 </div>
             </div>
         </nav>
     </div>
     <div class="container mt-5 pt-5">
-        {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-            <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
         <div class="row">
             <div class="roundBorder shadow col col-6 offset-3 p-3">
                 <h1 class="text-center mb-4">Create your account</h1>
@@ -70,27 +63,36 @@
                         </div>
                     </div>
                     <div class="float-right">
-                        <button class="fancyButtonB">Register</button>
+                        <button class="fancyButtonB1">Register</button>
                     </div>
 
                 </form>
+                {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
             </div>
         </div>
     </div>
-    <footer class="footer">footer content</footer>
+    <footer class="footer"></footer>
     <!-- The Modal -->
     <div id="myModal" class="modal">
         <!-- Modal content -->
         <div class="roundBorder modal-content">
-            <span class="close">&times;</span>
-            <h2 class="text-center">Housemates</h2>
-            <h1 class="mb-4 mt-4 text-center">Login</h1>
+            <div>
+                <span class="close float-right pr-3">&times;</span>
+            </div>
+            <h1 class="text-center">Housemates</h1>
+            <h2 class="mb-4 mt-4">Sign into your account</h2>
             <form action="/login" method="POST">
                 {% csrf_token %}
                 <input type="text" placeholder="email" class="mb-4 form-control" id="email" name="email">
                 <input type="password" placeholder="password" class="mb-4 form-control" id="password" name="password">
                 <div class="float-right">
-                    <button class="fancyButtonW">Login</button>
+                    <button class="fancyButtonW1">Login</button>
                 </div>
 
             </form>

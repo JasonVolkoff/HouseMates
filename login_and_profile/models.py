@@ -1,7 +1,5 @@
-# from Projects.HouseMates.housemates_proj.login_and_profile.views import main_house
 from django.db import models
 import re
-from django.db.models.deletion import CASCADE
 import bcrypt
 
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
@@ -80,16 +78,25 @@ class Item(models.Model):
         max_digits=10, decimal_places=2, default=0)
     owned_by = models.ManyToManyField(User, related_name="users_items")
     location = models.ForeignKey(
-        House, related_name="items", on_delete=CASCADE)
+        House, related_name="items", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def originalBuyerId(self):
+        origUser = self.owned_by.last()
+        return origUser.id
+
+    def originalBuyer(self):
+        origUser = self.owned_by.all()[0]
+        buyerName = f'{origUser.first_name} {origUser.last_name}'
+        return buyerName
 
 
 class Invite(models.Model):
     house = models.ForeignKey(
-        House, related_name="invites", on_delete=CASCADE)
+        House, related_name="invites", on_delete=models.CASCADE)
     user = models.ForeignKey(
-        User, related_name="invites", on_delete=CASCADE)
+        User, related_name="invites", on_delete=models.CASCADE)
 
 
 class Notification(models.Model):
@@ -102,19 +109,19 @@ class Notification(models.Model):
         ('ACCEPTED', 'accepted invite to'),
         ('DECLINED', 'declined invite to'))
     sender = models.ForeignKey(
-        User, on_delete=CASCADE, blank=True, null=True, related_name='sent_notifications')
-    receiver = models.ForeignKey(User, on_delete=CASCADE,
+        User, on_delete=models.CASCADE, blank=True, null=True, related_name='sent_notifications')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE,
                                  blank=True, null=True, related_name='received_notifications')
     house = models.ForeignKey(
-        House, on_delete=CASCADE, blank=True, null=True, related_name='notifications')
+        House, on_delete=models.CASCADE, blank=True, null=True, related_name='notifications')
     item = models.ForeignKey(Item, blank=True, null=True,
-                             related_name='item_notifications', on_delete=CASCADE)
+                             related_name='item_notifications', on_delete=models.CASCADE)
     helped_purchase = models.DecimalField(
         blank=True, null=True, max_digits=10, decimal_places=2)
     action = models.CharField(
         choices=ACTIONS, default='CREATED', max_length=32)
     invite = models.ForeignKey(
-        Invite, blank=True, null=True, related_name='notifications', on_delete=CASCADE)
+        Invite, blank=True, null=True, related_name='notifications', on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
 
     def profileFormat(self):
@@ -134,7 +141,7 @@ class Notification(models.Model):
         return notification
 
     def houseFormat(self):
-        notification = f"{self.sender.first_name} {self.get_action_display()}"
+        notification = f"{self.sender.first_name} {self.get_action_display()} "
         receiver = self.receiver
         house = self.house
         item = self.item
@@ -154,12 +161,10 @@ class Notification(models.Model):
 
     def houseOutputFormat(self):
         if self.action == "PURCHASED":
-            output = f'{self.item.price}'
+            output = f'${self.item.price}'
         elif self.action == "INVITED":
-            if House.objects.filter(member=self.receiver).exists():
+            if self.receiver in self.house.members.all():
                 output = "Accepted"
-            elif Invite.objects.filter(user=self.receiver).exists():
-                output = "Declined"
             else:
                 output = "Pending"
         elif self.action == "CREATED" or self.action == "ACCEPTED":
@@ -167,7 +172,7 @@ class Notification(models.Model):
         elif self.action == "HELPED":
             output = f'${self.helped_purchase} of ${self.item.price}'
         elif self.action == "DECLINED":
-            output = " "
+            output = "Invite declined"
         return output
 
 
@@ -176,4 +181,11 @@ class Balance(models.Model):
         max_digits=10, decimal_places=2, default=0)
     two_users = models.ManyToManyField(User, related_name="between_balance")
     first_user = models.ForeignKey(
-        User, related_name="first_balance", on_delete=CASCADE)
+        User, related_name="first_balance", on_delete=models.CASCADE)
+    house = models.ManyToManyField(House, related_name="house_balances")
+
+    def returnBalance(self):
+        return self.balance_owed
+
+    def returnBalanceNeg(self):
+        return (self.balance_owed)*-1

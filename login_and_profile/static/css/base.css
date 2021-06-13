@@ -1,18 +1,25 @@
 /* BASE CSS */
-body {
-    font-family: 'Brush Script MT', cursive;
-}
-
 html {
     position: relative;
     min-height: 100%;
 }
 
 body {
-    margin-bottom: 60px;
     /* Margin bottom by footer height */
+    margin-bottom: 60px;
 }
 
+/* FONTS */
+body {
+    font-family: 'Brush Script MT', cursive;
+}
+
+.smallText {
+    font-size: 12px;
+    padding-right: 0px !important;
+}
+
+/* FOOTER & NAV */
 nav {
     background-color: rgb(240, 255, 255);
 }
@@ -24,4 +31,12 @@ nav {
     height: 60px;
     line-height: 60px;
     background-color: rgb(240, 255, 255);
+}
+
+/* BORDERS */
+.border1 {
+    border-style: solid;
+    border-width: 1px;
+    border-color: #dee2e6;
+    border-radius: 20px;
 }

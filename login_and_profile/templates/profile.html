@@ -1,63 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HouseMates</title>
-
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
         integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
-    <script src="{% static 'javascript/script.js' %}"></script>
+    <script src="{% static 'javascript/style.js' %}"></script>
 </head>
 
 <body>
-    <div>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="offset-1 navbar-brand"> HouseMates</a>
-            <a class="offset-8 nav-item nav-link" href="/profile">{{ user.first_name }} {{ user.last_name }} </a>
-        </nav>
-    </div>
+    <nav class="navbar navbar-expand-lg">
+        <div class="col-10 offset-1 d-flex justify-content-between">
+            <a class="navbar-brand"> HouseMates</a>
+            <div class="mt-1">
+                <a class="nav-item nav-link" href="/profile">{{ user.first_name }} {{ user.last_name }} </a>
+            </div>
+        </div>
+    </nav>
     <div>
         <div class="row h-100">
             <div class="col-4">
                 <div class="row">
                     <div class="col-7 offset-5">
+                        {% comment %} Display all user's houses {% endcomment %}
+
                         <div class="mt-3 p-3 border1">
                             <h3>Your Houses</h3>
                             <hr>
                             <div>
-
-
-
-                                {% for membership in user.users_memberships.all %}
-
-                                {% if membership.pending_invite == False %}
-                                <form action="/profile/select_main_house/{{membership.house.id}}" method="POST">
+                                {% for house in user.houses.all %}
+                                <form action="/profile/select_main_house/{{house.id}}" method="POST">
                                     {% csrf_token %}
                                     <ul class="mt-3 houseSelection">
                                         <li>
                                             <i style='font-size:25px' class="fas fa-house-user">
-                                                <button class="fancyButton2">{{membership.house.nickname}}</button>
+                                                <button class="fancyButtonW1">{{house.nickname}}</button>
                                             </i>
                                         </li>
                                     </ul>
                                 </form>
-                                {% endif %}
                                 {% endfor %}
-
-
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-4 border-left border-right">
+            <div class=" col-4 border-left border-right">
                 <div class="p-1 pt-2">
                     <div class="row">
                         <div class="col-6">
@@ -65,15 +61,14 @@
                         </div>
                         <div class="col-6">
                             <form action="/logout">
-                                <button class="fancyButton float-right">Logout</button>
+                                <button class="fancyButtonW1 float-right">Logout</button>
                             </form>
-
                         </div>
                     </div>
                     <div id="banner" style="height: 200px;" class="border1">
                         <div id="img">
-
-                            {% comment %} add background image upload functionality {% endcomment %}
+                            {% comment %} add background image upload functionality
+                            {% endcomment %}
                             {% comment %} <img src="" alt=""> {% endcomment %}
                         </div>
                         <div id="profileCircle">
@@ -83,11 +78,13 @@
                     <div id="profileInfo">
                         <div class="row">
                             <div class="col-6">
-                                <p class="mb-0"><b>{{ user.first_name }} {{ user.last_name }}</b></p>
+                                <p class="mb-0"><b>{{ user.first_name }}
+                                        {{ user.last_name }}</b></p>
                                 <p>{{ user.email }}</p>
                             </div>
                             <div class="col-6">
-                                <button href="#" class="float-right col-6 fancyButton">Edit Profile</button>
+                                <button href="#" class="float-right col-6 fancyButtonW1">Edit
+                                    Profile</button>
                             </div>
                         </div>
                         <div class="text-center mt-5" id="notifications">
@@ -95,54 +92,33 @@
                             <hr>
                         </div>
                     </div>
+                    {% comment %} Display all user's notifications {% endcomment %}
+
                     <div class="notifications">
                         <div class="notificationFeed">
                             <table class="table table-striped">
                                 <tbody>
-                                    {% comment %} turn into block {% endcomment %}
                                     {% for notification in user.received_notifications.all reversed %}
                                     <tr>
-                                        <td>{{ notification.date|date:"M d, y" }}</td>
-                                        <td>
-
-                                            {{ notification.profileFormat }}
-
-
-
-
-
-                                            {% comment %} {% if notification.action == "INVITED" %}
-                                            {{ notification.sender.first_name }} {{ notification.sender.last_name }}
-                                            {% else %}You
-                                            {% endif %}
-                                            {{ notification.get_action_display }}
-
-
-                                            {% if notification.action  == "INVITED" %}
-                                            you to {{ notification.house.nickname }}
-                                            {% elif notifcation.action == "CREATED" %}
-                                            {{ notification.house.nickname }}
-                                            {% elif notification.action == "PURCHASED" %}
-                                            {{ notification.item.name }} in {{ notification.house.nickname }}
-                                            {% elif notification.action == "ACCEPTED" %}
-                                            {{ notification.house.nickname }}
-                                            {% endif %}{% endcomment %}
+                                        <td class="smalltext align-middle">{{ notification.date|date:"M d, 'y" }}
                                         </td>
-                                        <td>{% if notification.action == "CREATED" %}
-                                            Welcome!
-                                            {% elif notification.action == "INVITED" %}
-                                            {% if notification.membership.pending_invite == True %}
-
-                                            <form action="/profile/accept_invite/{{ notification.membership.id }}"
+                                        <td class="align-middle">
+                                            {{ notification.profileFormat }}
+                                        </td>
+                                        <td class="align-middle">
+                                            {% if notification.action == "INVITED" %}
+                                            <form action="/profile/invite_response/{{ notification.id }}/1"
                                                 method="POST">
                                                 {% csrf_token %}
-                                                <button class="fancyButton">Accept</button>
+                                                <button class="fancyButtonW1">Accept</button>
                                             </form>
-                                            {% else %}Accepted
+                                            <form action="/profile/invite_response/{{ notification.id }}/0"
+                                                method="POST">
+                                                {% csrf_token %}
+                                                <button class="fancyButtonW1">Decline</button>
+                                            </form>
                                             {% endif %}
-                                            {% elif notification.action == "PURCHASED" %}
-                                            {{ notification.item.price }}
-                                            {% endif %}</td>
+                                        </td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -154,6 +130,7 @@
             <div class="col-4">
                 <div class="row">
                     <div class="col-7">
+                        {% comment %} Form to create a house {% endcomment %}
                         <div class="mt-3 p-3 border1">
                             <h3>Create a House</h3>
                             <hr>
@@ -163,12 +140,13 @@
                                     <label for="nickname">Nickname</label>
                                     <input type="text" class="form-control" name="nickname" id="nickname">
                                 </div>
-                                <button class="fancyButton">Create</button>
+                                <button class="fancyButtonW1">Create</button>
                             </form>
                             {% if messages %}
                             <ul class="messages">
                                 {% for message in messages %}
-                                <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                                <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>
+                                    {{ message }}</li>
                                 {% endfor %}
                             </ul>
                             {% endif %}
@@ -178,6 +156,7 @@
             </div>
         </div>
     </div>
+    <footer class="footer"></footer>
 </body>
 
 </html>
