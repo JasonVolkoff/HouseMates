@@ -3,10 +3,14 @@
     background-color: rgb(226, 255, 255);
 }
 
+.lgBtn {
+    width: 165px !important;
+}
+
 .fancyButtonW1 {
     box-shadow: inset 0px 1px 0px 0px #ffffff;
     background: linear-gradient(to bottom, #ffffff 5%, #f6f6f6 100%);
-    width: 100px !important;
+    width: 100px;
     height: 30px;
     background-color: #ffffff;
     border-radius: 20px;
@@ -25,7 +29,7 @@
 .fancyButtonB1 {
     box-shadow: inset 0px 1px 0px 0px #ffffff;
     background: linear-gradient(to bottom, rgb(29, 161, 242) 5%, #35d3fa 100%);
-    width: 100px !important;
+    width: 100px;
     height: 30px;
     background-color: rgb(29, 161, 242);
     border-radius: 20px;
@@ -53,6 +57,8 @@
     position: relative;
     top: 1px;
 }
+
+
 
 #profileCircle {
     border-radius: 50%;

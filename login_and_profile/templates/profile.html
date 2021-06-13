@@ -9,7 +9,7 @@
     <title>HouseMates</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
         integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
@@ -31,7 +31,6 @@
                 <div class="row">
                     <div class="col-7 offset-5">
                         {% comment %} Display all user's houses {% endcomment %}
-
                         <div class="mt-3 p-3 border1">
                             <h3>Your Houses</h3>
                             <hr>
@@ -41,9 +40,9 @@
                                     {% csrf_token %}
                                     <ul class="mt-3 houseSelection">
                                         <li>
-                                            <i style='font-size:25px' class="fas fa-house-user">
-                                                <button class="fancyButtonW1">{{house.nickname}}</button>
-                                            </i>
+                                            <i style='font-size:25px' class="fas fa-house-user"></i>
+                                            <button
+                                                class="float-right mr-3 fancyButtonW1 lgBtn">{{house.nickname}}</button>
                                         </li>
                                     </ul>
                                 </form>
@@ -93,7 +92,6 @@
                         </div>
                     </div>
                     {% comment %} Display all user's notifications {% endcomment %}
-
                     <div class="notifications">
                         <div class="notificationFeed">
                             <table class="table table-striped">
