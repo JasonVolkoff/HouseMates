@@ -25,6 +25,21 @@ $( document ).ready(function() {
         return value.replace(/(?!\.)\D/g, "").replace(/(?<=\..*)\./g, "").replace(/(?<=\.\d\d).*/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     });
     }));
+    // $(window).resize(function() {
+    //     if ($(window).width() < 1025) {
+    //         $('#leftBox').append($('#rightRow'));
+    //     }
+    // }).resize();
+    // function moveDiv() {
+    //     var win = $(window).width();
+    //     if (win < 1025) {
+    //         $("#leftBox").insert($("#rightRow"));
+    //     }
+    // }
+    // moveDiv();
+    // $(window).resize(moveDiv);
+
+
 })
 
 

@@ -56,7 +56,6 @@ class User(models.Model):
     notification_amount = models.IntegerField(default=0)
     total_balance = models.DecimalField(
         max_digits=10, decimal_places=2, default=0.00)
-
     # Eventually add default profile_image + upload option
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
