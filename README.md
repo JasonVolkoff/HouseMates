@@ -1,6 +1,27 @@
 # HouseMates
 An application which allows users to create a virtual space with their roommates, then track &amp; manage expenses, store a running tally of who owes money to whom, and track ownership of who owns what. This python-based project utilizes Django web framework, including user registration, validation, and password encryption. 
 
+## Running the project
+`https://github.com/JasonVolkoff/HouseMates.git`
+After cloning the project, create and activate your virtual environment
+#### Unix/macOS:
+```
+python3 -m venv env
+source env/bin/activate
+```
+#### Windows
+```
+py -m venv env
+.\env\Scripts\activate
+```
+Next install dependencies located in the requirements.txt
+`pip install -r requirements.txt`
+Lastly, run migrations command and start your server
+```
+py manage.py migrate
+py manage.py runserver
+```
+From here, you can view the project on localhost:8000 in your browser by default
 
 ## **Minumum viable product:**
 - Users can create an account
@@ -12,7 +33,7 @@ An application which allows users to create a virtual space with their roommates
 - Users can read past purchases, including item type, cost, time of purchase, and ownership
 
 
-## **Additional optional features:**
+## **Features to add in the future:**
 - Link accounts with paypal/venmo API to settle balances
 - Allow amazon.com links as a viable alternative to manual form input (rather than typing out the item name and cost)
 - Allow for recurring bills (such as internet bill split between all roommates, but is due to a single user)
@@ -22,3 +43,4 @@ An application which allows users to create a virtual space with their roommates
 - Include user profile section to give ability to track personal bills
 - Include a chat system
 - Include chore notifications
+
