@@ -15,8 +15,11 @@ py -m venv env
 .\env\Scripts\activate
 ```
 Next install dependencies located in the requirements.txt
+
 `pip install -r requirements.txt`
+
 Navigate to `.\HouseMates\housemates_proj\` directory within your terminal.
+
 Lastly, run migrations command and start your server
 ```
 py manage.py migrate
