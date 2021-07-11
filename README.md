@@ -1,6 +1,8 @@
 # HouseMates
 An application which allows users to create a virtual space with their roommates, then track &amp; manage expenses, store a running tally of who owes money to whom, and track ownership of who owns what. This python-based project utilizes Django web framework, including user registration, validation, and password encryption. 
 
+![Gif showcase](https://media.giphy.com/media/WJP37LPAB0nhDzYjcs/giphy.gif)
+
 ## Running the project
 
 After cloning the project: `https://github.com/JasonVolkoff/HouseMates.git`, create and activate your virtual environment within your terminal
@@ -47,4 +49,5 @@ From here, you can view the project on localhost:8000 in your browser by default
 - Include user profile section to give ability to track personal bills
 - Include a chat system
 - Include chore notifications
+- Add edit profile, edit house, and remove user privaleges 
 
