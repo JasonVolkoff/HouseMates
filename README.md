@@ -3,6 +3,8 @@ An application which allows users to create a virtual space with their roommates
 
 ![Gif showcase](https://media.giphy.com/media/WJP37LPAB0nhDzYjcs/giphy.gif)
 
+<iframe src="https://giphy.com/embed/WJP37LPAB0nhDzYjcs" width="480" height="260" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/WJP37LPAB0nhDzYjcs">via GIPHY</a></p>
+
 ## Running the project
 
 After cloning the project: `https://github.com/JasonVolkoff/HouseMates.git`, create and activate your virtual environment within your terminal
