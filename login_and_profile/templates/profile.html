@@ -56,7 +56,7 @@
                 <div class="p-1 pt-2">
                     <div class="row">
                         <div class="col-6">
-                            <h2>{{ user.first_name }}'s Profile</h2>
+                            <h2>{{user.first_name}}'s Profile</h2>
                         </div>
                         <div class="col-6">
                             <form action="/logout">
@@ -104,6 +104,9 @@
                                         </td>
                                         <td class="align-middle">
                                             {% if notification.action == "INVITED" %}
+                                            {% if notification.invite == none %}
+                                            Accepted
+                                            {% else %}
                                             <form action="/profile/invite_response/{{ notification.id }}/1"
                                                 method="POST">
                                                 {% csrf_token %}
@@ -114,6 +117,7 @@
                                                 {% csrf_token %}
                                                 <button class="fancyButtonW1">Decline</button>
                                             </form>
+                                            {% endif %}
                                             {% endif %}
                                         </td>
                                     </tr>

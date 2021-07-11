@@ -1,4 +1,4 @@
-import re
+from re import sub
 from .models import User, Item, Invite, House, Balance, Notification
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -167,8 +167,10 @@ def add_item(request):
         redirect('/profile/main_house')
     this_user = User.objects.get(id=request.session['user_id'])
     this_house = House.objects.get(id=request.session['main_house_id'])
+    inputPrice = request.POST['price']
+    cleanPrice = float(sub(r'[^\d.]', '', inputPrice))
     this_item = Item.objects.create(
-        name=request.POST['name'], price=float(request.POST['price']), location=this_house)
+        name=request.POST['name'], price=cleanPrice, location=this_house)
     this_user.users_items.add(this_item)
     Notification.objects.create(
         sender=this_user, action="PURCHASED", item=this_item, house=this_house)
@@ -181,14 +183,23 @@ def help_purchase(request, item_id):
     # Get session user, relevant item, original buyer of item, and current house.
     this_user = User.objects.get(id=request.session['user_id'])
     this_item = Item.objects.get(id=item_id)
-    original_buyer = this_item.owned_by.all()[0]
+    original_buyer = this_item.owned_by.last()
+    print(original_buyer.first_name)
     amount = Decimal(request.POST['price'])
     this_house = House.objects.get(id=request.session['main_house_id'])
     # Add session user to be an additonal owner of the item.
     this_user.users_items.add(this_item)
     # Get Balance instance shared between original owner and session user.
-    shared_balance = Balance.objects.filter(
-        two_users__in=[this_user]).filter(two_users__in=[original_buyer])[0]
+    for bal in this_user.between_balance.all():
+        if original_buyer in bal.two_users.all():
+            shared_balance=bal
+
+
+
+
+
+    # shared_balance = Balance.objects.filter(
+    #     two_users__in=[this_user]).filter(two_users__in=[original_buyer])[0]
     # Add amount due FROM session user TO original owner.
     # When the shared_balance.first_user is the same as session user,
     # the balance is subtracted, otherwise it is added.
