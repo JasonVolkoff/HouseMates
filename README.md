@@ -29,7 +29,7 @@ Lastly, run migrations command and start your server
 py manage.py migrate
 py manage.py runserver
 ```
-From here, you can view the project on localhost:8000 in your browser by default
+From here, you can view the project on `localhost:8000` in your browser by default
 
 ## **Minumum viable product:**
 - Users can create an account
