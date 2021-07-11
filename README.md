@@ -2,7 +2,7 @@
 An application which allows users to create a virtual space with their roommates, then track &amp; manage expenses, store a running tally of who owes money to whom, and track ownership of who owns what. This python-based project utilizes Django web framework, including user registration, validation, and password encryption. 
 
 <p align="center">
-![Gif showcase](https://media.giphy.com/media/WJP37LPAB0nhDzYjcs/giphy.gif)
+  <img src="https://media.giphy.com/media/WJP37LPAB0nhDzYjcs/giphy.gif" alt="animated" />
 </p>
 
 ## Running the project
