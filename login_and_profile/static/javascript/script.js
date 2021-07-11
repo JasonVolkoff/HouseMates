@@ -1,18 +1,22 @@
 $( document ).ready(function() {
     // login.html js
-    var modal = document.getElementById("myModal"); // Modal POPUP
-    var btn = document.getElementsByClassName("myBtn");
-    var span = document.getElementsByClassName("close")[0];
-    for(var i = 0; i < btn.length; i++) {
-        var b = btn[i];
-        b.onclick = function() {
-        modal.style.display = "block";
+    const triggers = document.getElementsByClassName('myBtn');
+    const triggerArray = Array.from(triggers).entries();
+    const modals = document.getElementsByClassName('modal');
+    const closeButtons = document.getElementsByClassName('close');
+
+    for (let [index, trigger] of triggerArray) {
+    const openModal = () => {
+        modals[index].style.display = 'block';
     }
+    const closeModal = () => {
+        modals[index].style.display = 'none';
+    }
+    trigger.addEventListener("click", openModal);
+    closeButtons[index].addEventListener("click", closeModal);
     }
     
-    span.onclick = function() {
-        modal.style.display = "none";
-    }
+    
     window.onclick = function(event) {
         if (event.target == modal) {
         modal.style.display = "none";

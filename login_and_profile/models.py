@@ -82,11 +82,11 @@ class Item(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def originalBuyerId(self):
-        origUser = self.owned_by.last()
+        origUser = self.owned_by.first()
         return origUser.id
 
     def originalBuyer(self):
-        origUser = self.owned_by.all()[0]
+        origUser = self.owned_by.last()
         buyerName = f'{origUser.first_name} {origUser.last_name}'
         return buyerName
 
