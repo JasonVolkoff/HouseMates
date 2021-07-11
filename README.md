@@ -5,7 +5,7 @@ An application which allows users to create a virtual space with their roommates
   <img width="100%" src="https://media.giphy.com/media/WJP37LPAB0nhDzYjcs/giphy.gif" alt="animated" />
 </p>
 
-<img src="https://giphy.com/embed/WJP37LPAB0nhDzYjcs" width="100%" height="100%" style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen></img><p><a href="https://giphy.com/gifs/WJP37LPAB0nhDzYjcs">via GIPHY</a></p>
+<img src="https://giphy.com/embed/WJP37LPAB0nhDzYjcs" width="100%" height="100%" style="position:absolute" allowFullScreen></img><p><a href="https://giphy.com/gifs/WJP37LPAB0nhDzYjcs">via GIPHY</a></p>
 
 <p style="width:100%;height:0;padding-bottom:54%;position:relative;"><img src="https://giphy.com/embed/WJP37LPAB0nhDzYjcs" width="100%" height="100%" style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen></img></p><p><a href="https://giphy.com/gifs/WJP37LPAB0nhDzYjcs">via GIPHY</a></p>
 
