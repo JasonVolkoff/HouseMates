@@ -42,6 +42,7 @@ From here, you can view the project on `localhost:8000` in your browser by defau
 
 
 ## **Features to add in the future:**
+- Add responsiveness to ~~login~~, profile, and house templates
 - Link accounts with paypal/venmo API to settle balances
 - Allow amazon.com links as a viable alternative to manual form input (rather than typing out the item name and cost)
 - Allow for recurring bills (such as internet bill split between all roommates, but is due to a single user)
